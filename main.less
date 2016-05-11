@@ -16,6 +16,10 @@
 @screen-md: 900px;
 @screen-lg: 1300px;
 
+@heading-text: #091520;
+@heading-weight: 700;
+@body-text: #6A8693;
+
 //====================
 // Type
 //====================
@@ -24,25 +28,42 @@ html, body{
   font-family: 'Alegreya Sans', sans-serif;
 }
 
-h2, .h2{
-  font-weight: 400;
-
-  // mobile default
-  font-size: 32px;
-
+h1, .h1{
+  color: @heading-text;
+  font-weight: @heading-weight;
+  // default (mobile/xs) size
+  font-size: 60px;
+  line-height: 64px;
+  // SM and larger size
   @media (min-width: @screen-sm){
-    font-size: 48px;
+    font-size: 96px;
+    line-height: 105px;
   }
 }
 
-h4, .h4{
-  font-weight: 700;
+h2, .h2{
+  color: @heading-text;
+  font-weight: @heading-weight;
+  font-size: 40px;
+  line-height: 48px;
+}
 
-  font-size: 24px;
-  line-height: 34px;
+h3, .h3{
+  color: @heading-text;
+  font-weight: @heading-weight;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+h4, .h4{
+  color: @heading-text;
+  font-weight: @heading-weight;
+  font-size: 20px;
+  line-height: 24px;
 }
 
 p{
+  color: @body-text;
   font-weight: 400;
 
   // mobile default
@@ -55,9 +76,56 @@ p{
   }
 }
 
+hr {
+  // fixme: pull these out into vars
+  border-top: 2px solid #DCE2E4;
+
+  margin-top: 100px;
+  margin-bottom: 100px;
+
+  // margin is larger on non-mobile
+  @media (min-width: @screen-sm){
+    margin-top: 180px;
+    margin-bottom: 180px;
+  }
+}
+
 //====================
 // Custom Styles
 //====================
+
+
+// the normal column, optimized for line length
+.default-text{
+  .make-xs-column(18);
+  .make-xs-column-offset(3);
+  .make-sm-column(16);
+  .make-sm-column-offset(4);
+  .make-md-column(14);
+  .make-md-column-offset(5);
+  .make-lg-column(10);
+  .make-lg-column-offset(7);
+}
+
+//  those little 3-up images everyone always does
+.triplet{
+  background: #ef7;
+  .make-xs-column(18);
+  .make-xs-column-offset(3);
+  .make-sm-column(6);
+  .make-sm-column-offset(1);
+  .make-md-column(4);
+  .make-md-column-offset(1);
+  .make-lg-column(4);
+  .make-lg-column-offset(1);
+
+  &:first-of-type{
+    // all equal on XS
+    .make-sm-column-offset(2);
+    .make-md-column-offset(5);
+    .make-lg-column-offset(5);
+  }
+}
 
 .ruled{
 
@@ -104,27 +172,31 @@ p{
 
 .xs-vertical-center{
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .sm-vertical-center{
   @media (min-width: @screen-sm){
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 
 .md-vertical-center{
   @media (min-width: @screen-md){
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 
 .lg-vertical-center{
   @media (min-width: @screen-lg){
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 
