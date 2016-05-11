@@ -1,0 +1,133 @@
+extends ./_layout.pug
+
+block body
+  .container-fluid
+    .row
+      .default-text
+        h1.text-center Custom Expense Tracking
+    
+    hr
+
+    .row
+      .default-text
+        h2 The Premise:
+        p Personal finance software is still pretty bad, so I rolled my own.
+
+        p It scrapes my debit card data from Simple’s API, drops it into MongoDB, and gives me a custom interface that lets me interact with my spending in a way that fits my mental model, and more importantly, my actual financial goals.
+
+        p It’s designed to do a small number of really opinionated things:
+
+        ol
+          li Rank every card swipe based on my subjective opinion of how necessary a purchase was.
+
+          li Answer the question “how much of my spending is frivolous?” by tracking real spending against ideal spending, showing me how close I got to spending only on what matters.
+
+          li Display purchases in a few exploratory formats meant to help spending patterns stand out better than they would in a list.
+
+        p If you’d like, the code is available on github.
+    
+    hr
+
+    .row
+      .default-text
+        
+        h2 Transaction Feed &amp; Necessity Ranking
+
+        p This entire project started out as a means to see one kind of chart that I couldn’t get elsewhere, showing transactions as a subset of budget by both dollar amount and frivolousness. It looks like this:
+
+        //- 
+
+        p More on that chart later.
+
+        p Problem no.1 is getting my input on necessity tied to the bank’s transaction data in a way that doesn’t feel like excel grunt work.
+
+        p My first thought was a tinder-style mobile app with a single prompt and a dead simple response interface, but because this is exclusively a desktop tool, I opted for a feed that showed the minimum info necessary to make a decision, and the minimum interface for inputting a decision.The first pass of the ranking interface tried to mirror the chart it created as much as possible:
+
+        //- 
+
+        p I prototyped this, and the hit areas don’t feel very good. There isn’t much height to work with, and it feels too easy to stray sideways and hit the wrong box.
+
+        p To add some space and simplify things, I scaled back from a 1-10 ranking system to a 1-5:
+
+        //- 
+
+        p This felt really primitive and ugly looking. Back to the 1-10 scale.
+
+        //- 
+
+        p Okay, this is gettings somewhere. It feels good to use, and looks good. The only change I wanted was more indication of positivity and negativity. It didn’t have enough of the “this one’s good, this one’s bad” feeling that I wanted, so I experimented with two ways of coloring the dots on hover.
+
+        //- 
+
+        p The first colors the entire bar based on the ranking color, the second only reveals the underlying colors.
+
+        p In the prototype, I found the first option really distracting - parts of the interface that shouldn’t draw attention (the dots you’ve already passed over) keep flashing to new loud colors and pulling my eye away from the dot that’s actually being hovered over. #2 wins because it changes where you’re looking without pulling your eye back to somewhere it’s already been.
+
+        h3 Animation
+
+        p There are a lot of these transaction entries to be ranked, so fast input is the name of the game. When a transaction is ranked, it needs to get out of the way as fast as possible. 
+
+        p On the other hand, it shouldn’t just snap out of the way without giving any success feedback.
+
+        p I tweaked the height, Y,  and opacity params until I got one that felt snappy without being too brief.
+
+        p Additionally, the title bar has an counter-style animation when the number changes.
+
+        //- 
+
+        h3 Keyboard Input
+
+        p After building the above version, it occured to me that a keyboard input using the number keys would be a faster ranking system than clicking. You just need a way to turn it on and highlight the selected transaction.
+
+        p Here’s what I came up with:
+
+        //- 
+
+        p Clicking the keyboard button turns on numpad entry mode, which highlights the first entry in the list for ranking. Pressing any key 1 - (1)0 will rank the transaction and move on to the next. There’s currently no skip functionality, but I’ll eventally bind the arrow keys to that.
+
+    hr
+
+    .row
+      .default-text
+        h2 Tracking Spending Efficiency
+
+        p One of the most vaulable parts of this software is also the most simple.
+
+        p In a perfect world, how much could I save every month? How close to that amount did I actually get?
+
+        p The pie chart is a useful visual, but I wanted to have both the graph and the text, because I’m as interested in the exact dollar figures as I am the at-a-glance savings percentages.
+
+    .row
+      //- Graphic here
+
+    .row
+      .default-text
+        h2 Data Viz Playground
+
+        p This project is the perfect sandbox to try out different data visualization types. I’ve got years of authentic transaction data.
+
+        p Here are two that I’ve implemented so far.
+
+        h3 1. Stacked Bar
+
+        p The graph that kicked off this entire project.
+
+        p It uses the monthly take-home amount as a bounding box for the X asis, and plots transactions sized by their dollar amount, and colored by their level of necessity.
+
+        p An edge case that isn’t covered: when monthly spending exceeds monthly income. Thankfully this is a rare occurrence.
+
+    .row
+      //- Graphic here
+
+    .row
+      .default-text
+        h3 2. Spending By Day
+
+        p Plots the total amount spent each day. Weekends are highlighted.
+
+        p The Y axis is on a linear scale, but I’d like to make it a little smarter in the future, because my outsized San Francisco rent payment wreaks havoc on this thing.
+
+        p Note: this graph uses the date from the auth, but the dollar amount from the settle, to keep amounts accurate but avoid having transactions land on the days they were finialized, rather than swiped.
+
+    .row
+      //- Graphic here
