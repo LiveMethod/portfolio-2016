@@ -16,8 +16,9 @@ build:
 	# Convert less to css
 	lessc ./src/styles/main.less ./dist/styles/main.css
 
-	# move fonts
+	# move fonts and images
 	cp -r ./src/fonts ./dist
+	cp -r ./src/img ./dist
 
 # Delete static files
 clean:
